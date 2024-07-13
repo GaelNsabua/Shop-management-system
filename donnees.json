@@ -1,0 +1,32 @@
+[
+    {
+        "id": 2,
+        "nom": "BOUGIE",
+        "prix": 7000.0,
+        "qte": 6
+    },
+    {
+        "id": 3,
+        "nom": "BALLON",
+        "prix": 9000.0,
+        "qte": 34
+    },
+    {
+        "id": 5,
+        "nom": "POULE",
+        "prix": 9000.0,
+        "qte": 67
+    },
+    {
+        "id": 6,
+        "nom": "NATTE",
+        "prix": 8000.0,
+        "qte": 50
+    },
+    {
+        "id": 7,
+        "nom": "TABLEAU",
+        "prix": 40000.0,
+        "qte": 20
+    }
+]
