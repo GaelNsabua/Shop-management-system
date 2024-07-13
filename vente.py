@@ -61,26 +61,82 @@ class GestionMagasin:
                 ])
         return "Rapport exporté avec succès"
 
-# Chargement des données à partir des fichiers JSON
-articles = charger_fichier("articles.json")
-ventes = charger_fichier("ventes.json")
-commandes = charger_fichier("commandes.json")
+def afficher_menu():
+    print("1. Ajouter une note à une vente")
+    print("2. Filtrer les ventes par date")
+    print("3. Afficher le total des ventes par client")
+    print("4. Ajouter une commande")
+    print("5. Modifier une commande")
+    print("6. Supprimer une commande")
+    print("7. Exporter les rapports de vente en CSV")
+    print("8. Quitter")
 
-# Instanciation de l'objet GestionMagasin
-magasin = GestionMagasin(articles, ventes, commandes)
+def main():
+    articles = charger_fichier("articles.json")
+    ventes = charger_fichier("ventes.json")
+    commandes = charger_fichier("commandes.json")
 
-# Exemple d'utilisation des nouvelles fonctionnalités
-print(magasin.ajouter_note_vente(1, "Client très satisfait"))
-ventes_filtrees = magasin.filtrer_ventes_par_date("2023-01-01", "2023-12-31")
-for vente in ventes_filtrees:
-    print(vente)
+    magasin = GestionMagasin(articles, ventes, commandes)
 
-totals = magasin.total_ventes_par_client()
-for client, total in totals.items():
-    print(f"Client: {client}, Total: {total}")
+    while True:
+        afficher_menu()
+        choix = input("Entrez votre choix: ")
 
-magasin.ajouter_commande({"id": 1, "article": "Article1", "quantité": 2})
-magasin.modifier_commande(1, {"quantité": 3})
-magasin.supprimer_commande(1)
+        if choix == '1':
+            id_vente = int(input("Entrez l'ID de la vente: "))
+            note = input("Entrez la note: ")
+            print(magasin.ajouter_note_vente(id_vente, note))
 
-magasin.exporter_rapports_csv("ventes.csv")
+        elif choix == '2':
+            date_debut = input("Entrez la date de début (YYYY-MM-DD): ")
+            date_fin = input("Entrez la date de fin (YYYY-MM-DD): ")
+            ventes_filtrees = magasin.filtrer_ventes_par_date(date_debut, date_fin)
+            for vente in ventes_filtrees:
+                print(vente)
+
+        elif choix == '3':
+            totals = magasin.total_ventes_par_client()
+            for client, total in totals.items():
+                print(f"Client: {client}, Total: {total}")
+
+        elif choix == '4':
+            id_commande = int(input("Entrez l'ID de la commande: "))
+            article = input("Entrez le nom de l'article: ")
+            quantite = int(input("Entrez la quantité: "))
+            date = input("Entrez la date (YYYY-MM-DD): ")
+            commande = {"id": id_commande, "article": article, "quantité": quantite, "date": date}
+            magasin.ajouter_commande(commande)
+
+        elif choix == '5':
+            id_commande = int(input("Entrez l'ID de la commande à modifier: "))
+            nouvelles_infos = {}
+            article = input("Entrez le nouveau nom de l'article (laisser vide pour ne pas changer): ")
+            if article:
+                nouvelles_infos['article'] = article
+            quantite = input("Entrez la nouvelle quantité (laisser vide pour ne pas changer): ")
+            if quantite:
+                nouvelles_infos['quantité'] = int(quantite)
+            date = input("Entrez la nouvelle date (YYYY-MM-DD) (laisser vide pour ne pas changer): ")
+            if date:
+                nouvelles_infos['date'] = date
+            print(magasin.modifier_commande(id_commande, nouvelles_infos))
+
+        elif choix == '6':
+            id_commande = int(input("Entrez l'ID de la commande à supprimer: "))
+            print(magasin.supprimer_commande(id_commande))
+
+        elif choix == '7':
+            chemin_fichier = input("Entrez le chemin du fichier CSV: ")
+            print(magasin.exporter_rapports_csv(chemin_fichier))
+
+        elif choix == '8':
+            sauvegarder_fichier("articles.json", articles)
+            sauvegarder_fichier("ventes.json", ventes)
+            sauvegarder_fichier("commandes.json", commandes)
+            print("Données sauvegardées. Au revoir!")
+            break
+
+        else:
+            print("Choix invalide. Veuillez réessayer.")
+
+main()
